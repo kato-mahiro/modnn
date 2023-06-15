@@ -1,6 +1,7 @@
 import random
 import os
 from modnn import Neuron
+from modnn import Connection
 
 def read_config_file(file_path):
     config = {}
@@ -43,6 +44,8 @@ class genome:
         self.hidden_neurons = [Neuron(random.uniform(self.min_bias, self.min_bias)) for i in range(self.hidden_num)]
         self.modulatory_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for i in range(self.modulatory_num)]
         self.output_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for id in range(self.output_num)]
+        total_neuron_num = len(self.input_neurons) + len(self.hidden_neurons) + len(self.modulatory_neurons) + len(self.output_neurons)
+        self.connections = [ Connection(random.randint(0, total_neuron_num -1), random.randint(0, total_neuron_num), random.uniform(-1.0, 1.0)) for i in range(self.connection_num)]
 
 if __name__ == '__main__':
     # 設定ファイルのパス
