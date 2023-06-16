@@ -27,7 +27,7 @@ def read_config_file(file_path):
                             config[key] = value
     return config
 
-class genome:
+class Genome:
     def __init__(self, config_path):
         self.config = read_config_file(config_path)
         self.input_num = self.config['INPUT_NUM']
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     print("Number of connections:", connection_num)
     print("Has internal state:", has_internal_state)
 
-    genome = genome(config_file_path)
+    genome = Genome(config_file_path)
     print(genome.input_neurons)
     print(genome.hidden_neurons)
     print(genome.output_neurons)
