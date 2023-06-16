@@ -39,13 +39,17 @@ class genome:
         self.max_mod_depth = self.config['MAX_MOD_DEPTH']
         self.max_bias = self.config['MAX_BIAS']
         self.min_bias = self.config['MIN_BIAS']
+        self.min_weight = self.config['MIN_WEIGHT']
+        self.max_weight = self.config['MAX_WEIGHT']
+        self.weight_upper_limit = self.config['WEIGHT_UPPER_LIMIT']
+        self.weight_lower_limit = self.config['WEIGHT_LOWER_LIMIT']
         
         self.input_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for i in range(self.input_num)]
         self.hidden_neurons = [Neuron(random.uniform(self.min_bias, self.min_bias)) for i in range(self.hidden_num)]
         self.modulatory_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for i in range(self.modulatory_num)]
         self.output_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for id in range(self.output_num)]
         total_neuron_num = len(self.input_neurons) + len(self.hidden_neurons) + len(self.modulatory_neurons) + len(self.output_neurons)
-        self.connections = [ Connection(random.randint(0, total_neuron_num -1), random.randint(0, total_neuron_num), random.uniform(-1.0, 1.0)) for i in range(self.connection_num)]
+        self.connections = [ Connection(random.randint(0, total_neuron_num -1), random.randint(0, total_neuron_num), random.uniform(self.min_weight, self.max_weight)) for i in range(self.connection_num)]
 
 if __name__ == '__main__':
     # 設定ファイルのパス
