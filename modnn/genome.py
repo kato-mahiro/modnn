@@ -45,8 +45,8 @@ class Genome:
         self.weight_upper_limit = self.config['WEIGHT_UPPER_LIMIT']
         self.weight_lower_limit = self.config['WEIGHT_LOWER_LIMIT']
         
-        self.input_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for i in range(self.input_num)]
-        self.hidden_neurons = [Neuron(random.uniform(self.min_bias, self.min_bias)) for i in range(self.hidden_num)]
+        self.input_neurons = [Neuron(id =  i, bias = random.uniform(self.min_bias, self.max_bias)) for i in range(self.input_num)]
+        self.hidden_neurons = [Neuron(id = i + self.input_neurons, bias = random.uniform(self.min_bias, self.min_bias)) for i in range(self.hidden_num)]
         self.modulatory_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for i in range(self.modulatory_num)]
         self.output_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for id in range(self.output_num)]
         total_neuron_num = len(self.input_neurons) + len(self.hidden_neurons) + len(self.modulatory_neurons) + len(self.output_neurons)
