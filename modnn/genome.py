@@ -32,12 +32,10 @@ class Genome:
         self.config = read_config_file(config_path)
         self.input_num = self.config['INPUT_NUM']
         self.output_num = self.config['OUTPUT_NUM']
-        self.neuron_num = self.config['NEURON_NUM']
+        self.normal_num = self.config['NORMAL_NUM']
         self.lv1_num = self.config['LV1_MODULATORY_NUM']
         self.lv2_num = self.config['LV2_MODULATORY_NUM']
         self.connection_num = self.config['CONNECTION_NUM']
-        self.has_internal_state = self.config['HAS_INTERNAL_STATE']
-        self.max_mod_depth = self.config['MAX_MOD_DEPTH']
         self.max_bias = self.config['MAX_BIAS']
         self.min_bias = self.config['MIN_BIAS']
         self.min_weight = self.config['MIN_WEIGHT']
@@ -46,10 +44,11 @@ class Genome:
         self.weight_lower_limit = self.config['WEIGHT_LOWER_LIMIT']
         
         self.input_neurons = [Neuron(id =  i, bias = random.uniform(self.min_bias, self.max_bias)) for i in range(self.input_num)]
-        self.hidden_neurons = [Neuron(id = i + self.input_neurons, bias = random.uniform(self.min_bias, self.min_bias)) for i in range(self.hidden_num)]
-        self.modulatory_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for i in range(self.modulatory_num)]
-        self.output_neurons = [Neuron(random.uniform(self.min_bias, self.max_bias)) for id in range(self.output_num)]
-        total_neuron_num = len(self.input_neurons) + len(self.hidden_neurons) + len(self.modulatory_neurons) + len(self.output_neurons)
+        self.output_neurons = [Neuron(id = i + self.input_num , bias = random.uniform(self.min_bias, self.max_bias)) for i in range(self.output_num)]
+        self.normal_neurons = [Neuron(id = i + self.input_num + self.output_num, bias = random.uniform(self.min_bias, self.min_bias)) for i in range(self.normal_num)]
+        self.lv1_neurons = [Neuron(id = i + self.input_num + self.output_num + self.normal_num, bias = random.uniform(self.min_bias, self.max_bias)) for i in range(self.lv1_num)]
+        self.lv2_neurons = [Neuron(id = i + self.input_num + self.output_num + self.normal_num + self.lv1_num,  bias = random.uniform(self.min_bias, self.max_bias)) for i in range(self.lv2_num)]
+        total_neuron_num = len(self.input_neurons) + len(self.output_neurons) + len(self.normal_neurons) + len(self.lv1_neurons) + len(self.lv2_neurons)
         self.connections = [ Connection(random.randint(0, total_neuron_num -1), random.randint(0, total_neuron_num), random.uniform(self.min_weight, self.max_weight)) for i in range(self.connection_num)]
     
     #ニューロンidからニューロンの種類を取得する
@@ -104,20 +103,20 @@ if __name__ == '__main__':
     config = read_config_file(config_file_path)
 
     # 読み込んだ設定をプログラム内で利用する例
-    hidden_num = config['HIDDEN_NUM']
+    normal_num = config['NORMAL_NUM']
     input_num = config['INPUT_NUM']
     output_num = config['OUTPUT_NUM']
     connection_num = config['CONNECTION_NUM']
-    has_internal_state = config['HAS_INTERNAL_STATE']
 
     # 利用例として、読み込んだ設定を出力してみる
-    print("Hidden neurons:", hidden_num)
+    print("Normal neurons:", normal_num)
     print("Input neurons:", input_num)
     print("Output neurons:", output_num)
     print("Number of connections:", connection_num)
-    print("Has internal state:", has_internal_state)
 
     genome = Genome(config_file_path)
     print(genome.input_neurons)
-    print(genome.hidden_neurons)
     print(genome.output_neurons)
+    print(genome.normal_neurons)
+    print(genome.lv1_neurons)
+    print(genome.lv2_neurons)
