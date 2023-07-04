@@ -12,7 +12,7 @@ class Connection:
         self.to_id = to_id
         self.weight = weight
 
-class NeuralNetwork:
+class NN:
     def __init__(self, input_neurons, output_neurons, hidden_neurons, connections):
         self.input_neurons = [Neuron(id) for id in input_neurons]
         self.output_neurons = [Neuron(id) for id in output_neurons]
