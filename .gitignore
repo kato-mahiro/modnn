@@ -1,0 +1,4 @@
+build
+modnn.egg-info
+modnn/.vscode
+*/__pycache__
