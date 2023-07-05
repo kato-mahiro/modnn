@@ -12,13 +12,18 @@ class Connection:
         self.from_id = from_id
         self.to_id = to_id
         self.weight = weight
+        self.valid = True
 
 class NN:
-    def __init__(self, input_neurons, output_neurons, hidden_neurons, connections):
-        self.input_neurons = [Neuron(id) for id in input_neurons]
-        self.output_neurons = [Neuron(id) for id in output_neurons]
-        self.hidden_neurons = [Neuron(id) for id in hidden_neurons]
-        self.connections = [Connection(conn.from_id, conn.to_id, conn.weight) for conn in connections]
+    def __init__(self, genome):
+        self.input_neurons = genome.input_neurons
+        self.output_neurons = genome.output_neurons
+        self.normal_neurons = genome.normal_neurons
+        self.lv1_neurons = genome.lv1_neurons
+        self.lv2_neurons = genome.lv2_neurons
+        self.connections = genome.connections
+        for c in self.connections:
+            c.valid = self.is_valid_connection(c)
 
     def activate(self, inputs):
         # 入力ニューロンに値を設定
@@ -47,6 +52,21 @@ class NN:
             outputs.append(self.sigmoid(neuron_sum))
 
         return outputs
+
+    def get_neuron_type(self, neuron):
+        if neuron.id < self.genome.input_num:
+            return "input"
+        elif neuron.id < self.genome.input_num + self.genome.output_num:
+            return "output"
+        elif neuron.id < self.genome.input_num + self.genome.output_num + self.genome.normal_num:
+            return "normal"
+        elif neuron.id < self.genome.input_num + self.genome.output_num + self.genome.normal_num + self.genome.lv1_num:
+            return "lv1"
+        else:
+            return "lv2"
+
+    def is_valid_connection(self, connection):
+        return True
 
     @staticmethod
     def sigmoid(x):
