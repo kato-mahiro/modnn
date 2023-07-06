@@ -93,6 +93,9 @@ class NN:
                 node.attr['shape'] = 'triangle'
             node.attr['style'] = 'filled'
 
+            inode_subgraph = A.add_subgraph([i for i in range(self.genome.input_num)],rank='min')
+            inode_subgraph = A.add_subgraph([i for i in range(self.genome.input_num, self.genome.input_num+self.genome.output_num)],rank='max')
+
         
         A.draw('graph.png', prog='dot')
 
