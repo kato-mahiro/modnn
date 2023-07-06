@@ -49,7 +49,7 @@ class Genome:
         self.lv1_neurons = [Neuron(id = i + self.input_num + self.output_num + self.normal_num, bias = random.uniform(self.min_bias, self.max_bias)) for i in range(self.lv1_num)]
         self.lv2_neurons = [Neuron(id = i + self.input_num + self.output_num + self.normal_num + self.lv1_num,  bias = random.uniform(self.min_bias, self.max_bias)) for i in range(self.lv2_num)]
         total_neuron_num = len(self.input_neurons) + len(self.output_neurons) + len(self.normal_neurons) + len(self.lv1_neurons) + len(self.lv2_neurons)
-        self.connections = [ Connection(random.randint(0, total_neuron_num -1), random.randint(0, total_neuron_num), random.uniform(self.min_weight, self.max_weight)) for i in range(self.connection_num)]
+        self.connections = [ Connection(random.randint(0, total_neuron_num -1), random.randint(0, total_neuron_num -1), random.uniform(self.min_weight, self.max_weight)) for i in range(self.connection_num)]
     
     #ニューロンidからニューロンの種類を取得する
     def get_neuron_type(self, neuron_id):
