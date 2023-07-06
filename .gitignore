@@ -1,3 +1,4 @@
+*.png
 build
 modnn.egg-info
 modnn/.vscode
