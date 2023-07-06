@@ -90,7 +90,7 @@ class NN:
             elif(node_type == "lv1"):
                 node.attr['shape'] = 'box'
             elif(node_type == "lv2"):
-                node.attr['shape'] = 'star'
+                node.attr['shape'] = 'triangle'
             node.attr['style'] = 'filled'
 
         
