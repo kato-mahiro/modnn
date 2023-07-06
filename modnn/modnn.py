@@ -102,9 +102,9 @@ class NN:
         A = pgv.AGraph(directed=True)
         for connection in self.connections:
             if connection.valid:
-                if(self.get_neuron_type(connection.from_id) == "lv1"):
+                if(self.get_neuron_type(connection.from_id) == "lv1" or self.get_neuron_type(connection.to_id) == "lv1"):
                     color = "blue"
-                elif(self.get_neuron_type(connection.from_id) == "lv2"):
+                elif(self.get_neuron_type(connection.from_id) == "lv2" or self.get_neuron_type(connection.to_id) == "lv2"):
                     color = "purple"
                 else:
                     color = "black"
