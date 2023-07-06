@@ -102,7 +102,13 @@ class NN:
         A = pgv.AGraph(directed=True)
         for connection in self.connections:
             if connection.valid:
-                A.add_edge(connection.from_id, connection.to_id)
+                if(self.get_neuron_type(connection.from_id) == "lv1"):
+                    color = "blue"
+                elif(self.get_neuron_type(connection.from_id) == "lv2"):
+                    color = "purple"
+                else:
+                    color = "black"
+                A.add_edge(connection.from_id, connection.to_id, color=color)
         
         node_lsit = A.nodes()
         for node in node_lsit:
