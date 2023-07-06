@@ -1,4 +1,5 @@
 import math
+import pygraphviz as pgv
 
 class Neuron:
     def __init__(self, id, bias):
@@ -67,6 +68,9 @@ class NN:
 
     def is_valid_connection(self, connection):
         return True
+
+    def visualize_graph(self):
+        pass
 
     @staticmethod
     def sigmoid(x):
