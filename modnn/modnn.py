@@ -68,7 +68,12 @@ class NN:
             return "lv2"
 
     def is_valid_connection(self, connection):
-        return True
+        #再帰的(自分に戻ってくる)結合は無効化
+        if connection.from_id == connection.to_id:
+            return False
+        else:
+            return True
+
 
     def visualize_graph(self):
         A = pgv.AGraph()
