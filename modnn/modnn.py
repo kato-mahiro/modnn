@@ -70,7 +70,12 @@ class NN:
         return True
 
     def visualize_graph(self):
-        pass
+        A = pgv.AGraph()
+        for connection in self.connections:
+            if connection.valid:
+                A.add_edge(connection.from_id, connection.to_id)
+        
+        A.draw('graph.png', prog='dot')
 
     @staticmethod
     def sigmoid(x):
