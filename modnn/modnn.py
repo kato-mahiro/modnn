@@ -71,12 +71,35 @@ class NN:
         #再帰的(自分に戻ってくる)結合は無効化
         if connection.from_id == connection.to_id:
             return False
+        #入力ノードに入ってくる結合は無効化
+        elif self.get_neuron_type(connection.to_id) == "input":
+            return False
+        #出力ノードから出ていく結合は無効化
+        elif self.get_neuron_type(connection.from_id) == "output":
+            return False
+
+        #通常ニューロンどうしの結合は、idの小さいほうから大きいほうへのみ有効
+        elif self.get_neuron_type(connection.from_id) == "normal" and self.get_neuron_type(connection.to_id) == "normal":
+            if connection.from_id > connection.to_id:
+                return False
+            else:
+                return True
+        #lv1修飾ニューロンは、通常ニューロン・出力ニューロン以外に結合できない
+        elif self.get_neuron_type(connection.from_id) == "lv1"\
+             and self.get_neuron_type(connection.to_id) != "normal" \
+             and self.get_neuron_type(connection.to_id) != "output":
+            return False
+
+        #lv2修飾ニューロンは、lv1修飾ニューロン以外に結合できない
+        elif self.get_neuron_type(connection.from_id) == "lv2" and self.get_neuron_type(connection.to_id) != "lv1":
+            return False
+
         else:
             return True
 
 
     def visualize_graph(self):
-        A = pgv.AGraph()
+        A = pgv.AGraph(directed=True)
         for connection in self.connections:
             if connection.valid:
                 A.add_edge(connection.from_id, connection.to_id)
