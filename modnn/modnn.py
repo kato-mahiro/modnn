@@ -17,6 +17,7 @@ class Connection:
 
 class NN:
     def __init__(self, genome):
+        self.genome = genome
         self.input_neurons = genome.input_neurons
         self.output_neurons = genome.output_neurons
         self.normal_neurons = genome.normal_neurons
@@ -54,14 +55,14 @@ class NN:
 
         return outputs
 
-    def get_neuron_type(self, neuron):
-        if neuron.id < self.genome.input_num:
+    def get_neuron_type(self, id):
+        if id < self.genome.input_num:
             return "input"
-        elif neuron.id < self.genome.input_num + self.genome.output_num:
+        elif id < self.genome.input_num + self.genome.output_num:
             return "output"
-        elif neuron.id < self.genome.input_num + self.genome.output_num + self.genome.normal_num:
+        elif id < self.genome.input_num + self.genome.output_num + self.genome.normal_num:
             return "normal"
-        elif neuron.id < self.genome.input_num + self.genome.output_num + self.genome.normal_num + self.genome.lv1_num:
+        elif id < self.genome.input_num + self.genome.output_num + self.genome.normal_num + self.genome.lv1_num:
             return "lv1"
         else:
             return "lv2"
@@ -74,6 +75,24 @@ class NN:
         for connection in self.connections:
             if connection.valid:
                 A.add_edge(connection.from_id, connection.to_id)
+        
+        node_lsit = A.nodes()
+        for node in node_lsit:
+            id = int(node.get_name())
+            print(id)
+            node_type = self.get_neuron_type(id)
+            if(node_type == "input"):
+                node.attr['color'] = 'blue'
+                node.attr['fillcolor'] = 'blue'
+            elif(node_type == "output"):
+                node.attr['color'] = 'red'
+                node.attr['fillcolor'] = 'red'
+            elif(node_type == "lv1"):
+                node.attr['shape'] = 'box'
+            elif(node_type == "lv2"):
+                node.attr['shape'] = 'star'
+            node.attr['style'] = 'filled'
+
         
         A.draw('graph.png', prog='dot')
 
