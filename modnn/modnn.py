@@ -136,6 +136,43 @@ class NN:
                         elif(self.get_neuron_type(connection.from_id) == "lv2"):
                             modulated_sum += self.lv2_neurons[connection.from_id - self.genome.input_num -self.genome.output_num - self.genome.normal_num - self.genome.lv1_num].m_output * connection.weight
             n.modulated = modulated_sum
+        
+        #実際に各結合の重みを更新
+        for connection in self.connections:
+            if(connection.valid):
+                from_neuron_output = 0.0
+                to_neuron_output = 0.0
+                to_neuron_modulated = 0.0
+                if(self.get_neuron_type(connection.from_id) == "input"):
+                    from_neuron_output = self.input_neurons[connection.from_id].output
+                elif(self.get_neuron_type(connection.from_id) == "output"):
+                    from_neuron_output = self.output_neurons[connection.from_id - self.genome.input_num].output
+                elif(self.get_neuron_type(connection.from_id) == "normal"):
+                    from_neuron_output = self.normal_neurons[connection.from_id - self.genome.input_num - self.genome.output_num].output
+
+                if(self.get_neuron_type(connection.to_id) == "input"):
+                    to_neuron_output = self.input_neurons[connection.to_id].output
+                    to_neuron_modulated = self.input_neurons[connection.to_id].modulated
+                elif(self.get_neuron_type(connection.to_id) == "output"):
+                    to_neuron_output = self.output_neurons[connection.to_id - self.genome.input_num].output
+                    to_neuron_modulated = self.output_neurons[connection.to_id - self.genome.input_num].modulated
+                elif(self.get_neuron_type(connection.to_id) == "normal"):
+                    to_neuron_output = self.normal_neurons[connection.to_id - self.genome.input_num - self.genome.output_num].output
+                    to_neuron_modulated = self.normal_neurons[connection.to_id - self.genome.input_num - self.genome.output_num].modulated
+                elif(self.get_neuron_type(connection.to_id) == "lv1"):
+                    to_neuron_modulated = self.lv1_neurons[connection.to_id - self.genome.input_num - self.genome.output_num - self.genome.normal_num].modulated
+
+                #修飾ニューロンが、自分自身の出力を決める結合重みの更新に影響を与えないようにするための制約
+                if(self.get_neuron_type(connection.from_id) == "lv1" or self.get_neuron_type(connection.from_id) == "lv2"):
+                    d = 0.0
+                else:
+                    d = (self.a * to_neuron_output * from_neuron_output + self.b * to_neuron_output + self.c * from_neuron_output + self.d) * to_neuron_modulated
+
+                print("from:", connection.from_id, " to:", connection.to_id, " d:", d)
+
+                connection.weight += d
+            
+
 
     def get_neuron_type(self, id):
         if id < self.genome.input_num:
