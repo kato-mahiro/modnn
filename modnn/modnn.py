@@ -6,6 +6,7 @@ class Neuron:
         self.id = id
         self.output = 0.0
         self.m_output = 0.0
+        self.modulated = 0.0
         self.bias = bias
 
 class Connection:
@@ -92,7 +93,48 @@ class NN:
     def weight_update(self):
         #activate()の実行後に実行する
 
-        pass
+        #各ニューロンがどの程度修飾されているか(modulated)を計算
+        # 通常ニューロンのmodulated値を計算
+        for n in self.normal_neurons:
+            modulated_sum = 0.0
+            for connection in self.connections:
+                if(connection.valid):
+                    if connection.to_id == n.id:
+                        if (self.get_neuron_type(connection.from_id) == "lv1"):
+                            modulated_sum += self.lv1_neurons[connection.from_id - self.genome.input_num - self.genome.output_num - self.genome.normal_num].m_output * connection.weight
+                        elif(self.get_neuron_type(connection.from_id) == "lv2"):
+                            modulated_sum += self.lv2_neurons[connection.from_id - self.genome.input_num -self.genome.output_num - self.genome.normal_num - self.genome.lv1_num].m_output * connection.weight
+            n.modulated = modulated_sum
+
+        # lv.1 ニューロンのmodulated値を計算
+        for n in self.lv1_neurons:
+            modulated_sum = 0.0
+            for connection in self.connections:
+                if(connection.valid):
+                    if connection.to_id == n.id:
+                        if (self.get_neuron_type(connection.from_id) == "lv1"):
+                            print("ERROR: lv1ニューロンがlv1ニューロンに修飾されている")
+                            exit()
+                            modulated_sum += self.lv1_neurons[connection.from_id - self.genome.input_num - self.genome.output_num - self.genome.normal_num].m_output * connection.weight
+                        elif(self.get_neuron_type(connection.from_id) == "lv2"):
+                            modulated_sum += self.lv2_neurons[connection.from_id - self.genome.input_num -self.genome.output_num - self.genome.normal_num - self.genome.lv1_num].m_output * connection.weight
+            n.modulated = modulated_sum
+
+        # lv.2 ニューロンのmodulated値を計算
+        for n in self.lv2_neurons:
+            n.modulated = 0.0 #lv2ニューロンは修飾されない
+
+        #出力ニューロンのmodulated値を計算
+        for n in self.output_neurons:
+            modulated_sum = 0.0
+            for connection in self.connections:
+                if(connection.valid):
+                    if connection.to_id == n.id:
+                        if (self.get_neuron_type(connection.from_id) == "lv1"):
+                            modulated_sum += self.lv1_neurons[connection.from_id - self.genome.input_num - self.genome.output_num - self.genome.normal_num].m_output * connection.weight
+                        elif(self.get_neuron_type(connection.from_id) == "lv2"):
+                            modulated_sum += self.lv2_neurons[connection.from_id - self.genome.input_num -self.genome.output_num - self.genome.normal_num - self.genome.lv1_num].m_output * connection.weight
+            n.modulated = modulated_sum
 
     def get_neuron_type(self, id):
         if id < self.genome.input_num:
