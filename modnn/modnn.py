@@ -28,31 +28,39 @@ class NN:
             c.valid = self.is_valid_connection(c)
 
     def activate(self, inputs):
+        assert(len(inputs) == self.genome.input_num)
+
         # 入力ニューロンに値を設定
         for i in range(len(inputs)):
             self.input_neurons[i].output = inputs[i]
-
-        # 隠れニューロンの値を計算
-        for neuron in self.hidden_neurons:
-            neuron_sum = 0.0
-            # 入力からの結合を考慮
+        
+        # 通常ニューロンの値を計算
+        for n in self.normal_neurons:
+            neuron_sum = n.bias
             for connection in self.connections:
-                if connection.to_id == neuron.id:
-                    neuron_sum += self.input_neurons[connection.from_id].output * connection.weight
-            # シグモイド関数による活性化
-            neuron.output = self.sigmoid(neuron_sum)
-
+                if(connection.valid):
+                    if connection.to_id == n.id:
+                        if (self.get_neuron_type(connection.from_id) == "input"):
+                            neuron_sum += self.input_neurons[connection.from_id].output * connection.weight
+                        elif(self.get_neuron_type(connection.from_id) == "normal"):
+                            neuron_sum += self.normal_neurons[connection.from_id - self.genome.input_num].output * connection.weight
+            #シグモイド関数による活性化
+            n.output = self.sigmoid(neuron_sum)
+        
         # 出力ニューロンの値を計算
         outputs = []
-        for neuron in self.output_neurons:
-            neuron_sum = 0.0
-            # 隠れからの結合を考慮
+        for n in self.output_neurons:
+            neuron_sum = n.bias
             for connection in self.connections:
-                if connection.to_id == neuron.id:
-                    neuron_sum += self.hidden_neurons[connection.from_id].output * connection.weight
+                if(connection.valid):
+                    if connection.to_id == n.id:
+                        if (self.get_neuron_type(connection.from_id) == "input"):
+                            neuron_sum += self.input_neurons[connection.from_id].output * connection.weight
+                        elif(self.get_neuron_type(connection.from_id) == "normal"):
+                            neuron_sum += self.normal_neurons[connection.from_id - self.genome.input_num].output * connection.weight
             # シグモイド関数による活性化
-            outputs.append(self.sigmoid(neuron_sum))
-
+            n.output = self.sigmoid(neuron_sum)
+            outputs.append(n.output)
         return outputs
 
     def get_neuron_type(self, id):
