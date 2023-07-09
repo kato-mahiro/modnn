@@ -43,10 +43,14 @@ class NN:
                         if (self.get_neuron_type(connection.from_id) == "input"):
                             neuron_sum += self.input_neurons[connection.from_id].output * connection.weight
                         elif(self.get_neuron_type(connection.from_id) == "normal"):
-                            neuron_sum += self.normal_neurons[connection.from_id - self.genome.input_num].output * connection.weight
+                            try:
+                                neuron_sum += self.normal_neurons[connection.from_id - self.genome.input_num -self.genome.output_num].output * connection.weight
+                            except:
+                                print("from_id:",connection.from_id)
+                                print("input_num:", self.genome.input_num)
             #シグモイド関数による活性化
             n.output = self.sigmoid(neuron_sum)
-        
+
         # 出力ニューロンの値を計算
         outputs = []
         for n in self.output_neurons:
@@ -57,11 +61,16 @@ class NN:
                         if (self.get_neuron_type(connection.from_id) == "input"):
                             neuron_sum += self.input_neurons[connection.from_id].output * connection.weight
                         elif(self.get_neuron_type(connection.from_id) == "normal"):
-                            neuron_sum += self.normal_neurons[connection.from_id - self.genome.input_num].output * connection.weight
+                            neuron_sum += self.normal_neurons[connection.from_id - self.genome.input_num - self.genome.output_num].output * connection.weight
             # シグモイド関数による活性化
             n.output = self.sigmoid(neuron_sum)
             outputs.append(n.output)
         return outputs
+
+    def weight_update(self):
+        #activate()の実行後に実行する
+
+        pass
 
     def get_neuron_type(self, id):
         if id < self.genome.input_num:
