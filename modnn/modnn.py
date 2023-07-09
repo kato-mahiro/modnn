@@ -19,6 +19,7 @@ class Connection:
 class NN:
     def __init__(self, genome):
         self.genome = genome
+        self.a, self.b, self.c, self.d = genome.a, genome.b, genome.c, genome.d
         self.input_neurons = genome.input_neurons
         self.output_neurons = genome.output_neurons
         self.normal_neurons = genome.normal_neurons
