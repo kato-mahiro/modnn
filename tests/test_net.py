@@ -1,6 +1,8 @@
 import modnn
+from modnn import utils
 
-genome = modnn.Genome('./config.txt')
+config = utils.read_config_file('./config.txt')
+genome = modnn.Genome(config)
 print(genome)
 net = modnn.NN(genome)
 net.visualize_graph()

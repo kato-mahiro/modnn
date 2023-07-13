@@ -5,8 +5,8 @@ from modnn import Connection
 from modnn import utils
 
 class Genome:
-    def __init__(self, config_path):
-        self.config = utils.read_config_file(config_path)
+    def __init__(self, config):
+        self.config = config
         self.input_num = self.config['INPUT_NUM']
         self.output_num = self.config['OUTPUT_NUM']
         self.normal_num = self.config['NORMAL_NUM']
