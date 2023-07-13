@@ -2,34 +2,11 @@ import random
 import os
 from modnn import Neuron
 from modnn import Connection
-
-def read_config_file(file_path):
-    config = {}
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-        for line in lines:
-            line = line.strip()
-            if line and not line.startswith('#'):
-                key, value = line.split('=')
-                key = key.strip()
-                value = value.strip()
-                try:
-                    config[key] = int(value)
-                except ValueError:
-                    try:
-                        config[key] = float(value)
-                    except ValueError:
-                        if value.lower() == 'true':
-                            config[key] = True
-                        elif value.lower() == 'false':
-                            config[key] = False
-                        else:
-                            config[key] = value
-    return config
+from modnn import utils
 
 class Genome:
     def __init__(self, config_path):
-        self.config = read_config_file(config_path)
+        self.config = utils.read_config_file(config_path)
         self.input_num = self.config['INPUT_NUM']
         self.output_num = self.config['OUTPUT_NUM']
         self.normal_num = self.config['NORMAL_NUM']
@@ -106,7 +83,7 @@ if __name__ == '__main__':
     config_file_path = './tests/config.txt'
 
     # 設定ファイルを読み込む
-    config = read_config_file(config_file_path)
+    config = utils.read_config_file(config_file_path)
 
     # 読み込んだ設定をプログラム内で利用する例
     normal_num = config['NORMAL_NUM']
